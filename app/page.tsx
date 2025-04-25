@@ -1,9 +1,7 @@
 "use client";
 
-import type React from "react";
-
-import { useState, useRef, useEffect } from "react";
-import { Mail, MessageSquare, Plus } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
+import { Mail, MessageSquare, Plus, X } from "lucide-react";
 import Grid from "../components/Grid";
 import { useRouter } from "next/navigation";
 
