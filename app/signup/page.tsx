@@ -1,12 +1,41 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "../firebase/config";
 
 export default function SignUpPage() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [createUserWithEmailAndPassword] =
+    useCreateUserWithEmailAndPassword(auth);
+  const router = useRouter();
+
+  const handleSignup = async () => {
+    try {
+      const res = await createUserWithEmailAndPassword(email, password);
+      if (res) {
+        setEmail("");
+        setPassword("");
+        sessionStorage.setItem("user", "true");
+        window.location.href = "/";
+      } else {
+        alert("Signup failed. Please check your email and password.");
+      }
+    } catch (error: any) {
+      alert(error.message || "An error occurred during signup.");
+      console.error(error);
+    }
+  };
 
   return (
     <main className="flex flex-col justify-center items-center min-h-screen px-6 bg-[#282828] text-white w-[393px] mx-auto">
@@ -27,21 +56,27 @@ export default function SignUpPage() {
 
         <input
           type="text"
-          placeholder="Your name"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="w-full bg-transparent border-b border-gray-400 mb-6 p-2 text-sm placeholder-gray-400"
         />
 
         <input
           type="email"
           placeholder="Your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="w-full bg-transparent border-b border-gray-400 mb-6 p-2 text-sm placeholder-gray-400"
         />
 
         {/* Password Field */}
         <div className="relative mb-6">
           <input
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-transparent border-b border-gray-400 p-2 pr-10 text-sm placeholder-gray-400"
           />
           <button
@@ -50,7 +85,7 @@ export default function SignUpPage() {
             onClick={() => setShowPassword(!showPassword)}
           >
             <Image
-              src={showPassword ? '/eyeslash.svg' : '/eye.svg'}
+              src={showPassword ? "/eyeslash.svg" : "/eye.svg"}
               alt="Toggle password visibility"
               width={20}
               height={20}
@@ -61,7 +96,7 @@ export default function SignUpPage() {
         {/* Confirm Password Field */}
         <div className="relative mb-6">
           <input
-            type={showConfirmPassword ? 'text' : 'password'}
+            type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm your password"
             className="w-full bg-transparent border-b border-gray-400 p-2 pr-10 text-sm placeholder-gray-400"
           />
@@ -71,7 +106,7 @@ export default function SignUpPage() {
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
           >
             <Image
-              src={showConfirmPassword ? '/eyeslash.svg' : '/eye.svg'}
+              src={showConfirmPassword ? "/eyeslash.svg" : "/eye.svg"}
               alt="Toggle password visibility"
               width={20}
               height={20}
@@ -79,12 +114,15 @@ export default function SignUpPage() {
           </button>
         </div>
 
-        <button className="w-full bg-[#5B3EFF] text-white rounded-full py-3 font-semibold text-sm hover:bg-[#6d52ff]">
+        <button
+          onClick={handleSignup}
+          className="w-full bg-[#5B3EFF] text-white rounded-full py-3 font-semibold text-sm hover:bg-[#6d52ff]"
+        >
           Sign Up
         </button>
 
         <p className="text-sm text-center mt-4 text-gray-400">
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Link href="/login" className="text-[#5B3EFF] underline">
             Login
           </Link>

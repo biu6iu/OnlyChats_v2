@@ -1,11 +1,17 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Mail, MessageSquare, Plus, X } from "lucide-react";
-import Grid from "../components/Grid";
+import { Mail, MessageSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/navbar/Navbar";
-import NewTopicButton from "@/components/navbar/newTopicButton";
+
+import Grid from "../components/Grid";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/Footer";
+import NewTopicButton from "@/components/footer/newTopicButton";
+
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./firebase/config";
+import { signOut } from "firebase/auth";
 
 // Import the Prompt interface from Grid component or define it here
 interface Prompt {
@@ -19,6 +25,29 @@ export default function Home(): React.ReactElement {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newPrompt, setNewPrompt] = useState<string>("");
   const modalRef = useRef<HTMLDivElement | null>(null);
+
+  const [user] = useAuthState(auth);
+  const [userSession, setUserSession] = useState<string | null>(null);
+
+  console.log(user);
+
+  useEffect(() => {
+    console.log(user);
+    if (typeof window !== "undefined") {
+      setUserSession(sessionStorage.getItem("user"));
+    }
+  }, [user]);
+
+  const handleLogout = async () => {
+    try {
+      const res = await signOut(auth);
+      console.log({ res });
+      sessionStorage.removeItem("user");
+      setUserSession(sessionStorage.getItem("user"));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   // Sample prompts import from backend
   const [prompts, setPrompts] = useState<Prompt[]>([
@@ -117,14 +146,22 @@ export default function Home(): React.ReactElement {
     <div className="flex justify-center items-center min-h-screen bg-[#282828]">
       <div className="phone-frame">
         <div className="flex flex-col h-full">
+          <Header>
+            {!user && !userSession ? (
+              <button onClick={() => router.push("/login")}>Login</button>
+            ) : (
+              <button onClick={handleLogout}>Logout</button>
+            )}
+          </Header>
+
           <Grid prompts={prompts} />
 
           {/* Bottom navigation */}
-          <Navbar>
+          <Footer>
             <MessageSquare className="w-6 h-6" />
             <NewTopicButton onClick={() => setIsModalOpen(true)} />
             <Mail className="w-6 h-6" />
-          </Navbar>
+          </Footer>
 
           {/* Create Prompt Modal */}
           {isModalOpen && (
