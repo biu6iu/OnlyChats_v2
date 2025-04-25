@@ -9,6 +9,20 @@
 .chat .header {
     padding: 30px;
     border-bottom: 1px solid rgb(68, 68, 68);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.chat .back {
+    margin-top: -5px;
+    margin-left: -10px;
+    cursor: pointer;
+}
+
+.chat .groupTopic {
+    margin-top: -5px;
+    margin-left: -10px;
 }
 
 .chat .top {

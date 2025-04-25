@@ -3,19 +3,30 @@
 import "./chat.css";
 import { useState } from "react";
 import EmojiPicker from "emoji-picker-react";
+import { useRouter } from "next/navigation";
 
 const Chat = () => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
+    const router = useRouter();
+
+
 
     const handleEmoji = (e: any) => {
         setText(prev => prev + e.emoji);
         setOpen(false);
     };
 
+    const handleBack = () => {
+        window.location.href = "/";
+    };
+
     return (
         <div className="chat">
             <div className="header">
+                <button className="back" onClick={handleBack}>
+                    <img src="/back.svg" alt="" />
+                </button>
                 <div className="groupTopic">
                     <span>Group Topic</span>
                 </div>
