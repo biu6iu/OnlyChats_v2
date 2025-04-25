@@ -114,73 +114,77 @@ export default function Home(): React.ReactElement {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-black">
-      <Grid prompts={prompts} />
+    <div className="flex justify-center items-center min-h-screen bg-[#282828]">
+      <div className="phone-frame">
+        <div className="flex flex-col h-full">
+          <Grid prompts={prompts} />
 
-      {/* Bottom navigation */}
-      <Navbar>
-        <MessageSquare className="w-6 h-6" />
-        <NewTopicButton onClick={() => setIsModalOpen(true)} />
-        <Mail className="w-6 h-6" />
-      </Navbar>
+          {/* Bottom navigation */}
+          <Navbar>
+            <MessageSquare className="w-6 h-6" />
+            <NewTopicButton onClick={() => setIsModalOpen(true)} />
+            <Mail className="w-6 h-6" />
+          </Navbar>
 
-      {/* Create Prompt Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div
-            ref={modalRef}
-            className="bg-gray-800 rounded-lg w-full max-w-md mx-4"
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-700">
-              <div className="flex items-center space-x-2">
-                <img
-                  src="/api/placeholder/40/40"
-                  alt="User"
-                  className="w-8 h-8 rounded-full"
-                />
-                <span className="text-gray-200 font-medium">Jane Row</span>
-              </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-gray-400 hover:text-white"
+          {/* Create Prompt Modal */}
+          {isModalOpen && (
+            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+              <div
+                ref={modalRef}
+                className="bg-gray-800 rounded-lg w-full max-w-md mx-4"
               >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+                {/* Modal Header */}
+                <div className="flex items-center justify-between p-4 border-b border-gray-700">
+                  <div className="flex items-center space-x-2">
+                    <img
+                      src="/api/placeholder/40/40"
+                      alt="User"
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <span className="text-gray-200 font-medium">Jane Row</span>
+                  </div>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
-            {/* Modal Body */}
-            <div className="p-4">
-              <textarea
-                className="w-full bg-gray-700 text-white rounded-lg p-4 min-h-32 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Write your post or question here"
-                value={newPrompt}
-                onChange={(e) => setNewPrompt(e.target.value)}
-              />
+                {/* Modal Body */}
+                <div className="p-4">
+                  <textarea
+                    className="w-full bg-gray-700 text-white rounded-lg p-4 min-h-32 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Write your post or question here"
+                    value={newPrompt}
+                    onChange={(e) => setNewPrompt(e.target.value)}
+                  />
 
-              <div className="flex items-center mt-4 space-x-2">
-                <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
-                  <span>Add media</span>
-                </button>
+                  <div className="flex items-center mt-4 space-x-2">
+                    <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
+                      <span>Add media</span>
+                    </button>
 
-                <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
-                  <span>Add Category</span>
-                </button>
+                    <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
+                      <span>Add Category</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Modal Footer */}
+                <div className="p-4 flex justify-end">
+                  <button
+                    className="bg-indigo-600 text-white px-5 py-2 rounded-md font-medium hover:bg-indigo-500 transition-colors"
+                    onClick={handleCreatePrompt}
+                  >
+                    Post
+                  </button>
+                </div>
               </div>
             </div>
-
-            {/* Modal Footer */}
-            <div className="p-4 flex justify-end">
-              <button
-                className="bg-indigo-600 text-white px-5 py-2 rounded-md font-medium hover:bg-indigo-500 transition-colors"
-                onClick={handleCreatePrompt}
-              >
-                Post
-              </button>
-            </div>
-          </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
