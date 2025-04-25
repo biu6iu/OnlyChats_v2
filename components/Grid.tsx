@@ -288,81 +288,86 @@ const Grid: React.FC<GridProps> = ({ prompts }) => {
   }, [dragging, position, startPos, startTime]);
 
   return (
-    <div
-      ref={containerRef}
-      className="flex-1 overflow-hidden relative flex items-center justify-center touch-none"
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-    >
+    <div className="flex flex-col h-screen bg-black">
+      {/* App grid container */}
       <div
-        ref={gridRef}
-        className="relative transform transition-transform duration-300"
-        style={{
-          transform: `translate(${position.x}px, ${position.y}px)`,
-          transitionProperty: dragging ? "none" : "transform",
-        }}
-        onTransitionEnd={() => {
-          // Recalculate selected bubble after transition completes
-          updateSelectedPrompt();
-        }}
+        ref={containerRef}
+        className="flex-1 overflow-hidden relative flex items-center justify-center touch-none"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
       >
-        {prompts.map((prompt, index) => {
-          const isSelected = index === selectedIndex;
-          const bubblePos = bubblePositions[index] || { x: 0, y: 0 };
+        <div
+          ref={gridRef}
+          className="relative transform transition-transform duration-300"
+          style={{
+            transform: `translate(${position.x}px, ${position.y}px)`,
+            transitionProperty: dragging ? "none" : "transform",
+          }}
+          onTransitionEnd={() => {
+            // Recalculate selected bubble after transition completes
+            updateSelectedPrompt();
+          }}
+        >
+          {prompts.map((prompt, index) => {
+            const isSelected = index === selectedIndex;
+            const bubblePos = bubblePositions[index] || { x: 0, y: 0 };
 
-          return (
-            <div
-              key={prompt.id}
-              className={`app-icon rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer absolute ${
-                isSelected ? "ring-4 ring-white shadow-2xl" : "shadow-xl"
-              }`}
-              style={{
-                width: isSelected ? "380px" : "180px",
-                height: isSelected ? "380px" : "180px",
-                backgroundColor: prompt.color,
-                zIndex: isSelected ? 10 : 1,
-                opacity: isSelected ? 1 : 0.9,
-                left: `calc(50% + ${bubblePos.x}px)`,
-                top: `calc(50% + ${bubblePos.y}px)`,
-                transform: `translate(-50%, -50%) ${
-                  isSelected ? "scale(1.1)" : "scale(1)"
-                }`,
-                boxShadow:
-                  "0 10px 15px -3px rgba(255, 255, 255, 0.3), 0 4px 6px -2px rgba(255, 255, 255, 0.2)",
-                overflow: "hidden",
-                touchAction: "none", // Prevent default touch behavior
-              }}
-              onClick={(e) => handleBubbleInteraction(index, isSelected, e)}
-              onTouchEnd={(e) => handleBubbleInteraction(index, isSelected, e)}
-            >
-              <div className="p-6 text-center flex flex-col items-center justify-center h-full">
-                {isSelected ? (
-                  <>
-                    <p className="text-3xl text-white font-medium leading-tight mb-4">
+            return (
+              <div
+                key={prompt.id}
+                className={`app-icon rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer absolute ${
+                  isSelected ? "ring-4 ring-white shadow-2xl" : "shadow-xl"
+                }`}
+                style={{
+                  width: isSelected ? "380px" : "180px",
+                  height: isSelected ? "380px" : "180px",
+                  backgroundColor: prompt.color,
+                  zIndex: isSelected ? 10 : 1,
+                  opacity: isSelected ? 1 : 0.9,
+                  left: `calc(50% + ${bubblePos.x}px)`,
+                  top: `calc(50% + ${bubblePos.y}px)`,
+                  transform: `translate(-50%, -50%) ${
+                    isSelected ? "scale(1.1)" : "scale(1)"
+                  }`,
+                  boxShadow:
+                    "0 10px 15px -3px rgba(255, 255, 255, 0.3), 0 4px 6px -2px rgba(255, 255, 255, 0.2)",
+                  overflow: "hidden",
+                  touchAction: "none", // Prevent default touch behavior
+                }}
+                onClick={(e) => handleBubbleInteraction(index, isSelected, e)}
+                onTouchEnd={(e) =>
+                  handleBubbleInteraction(index, isSelected, e)
+                }
+              >
+                <div className="p-6 text-center flex flex-col items-center justify-center h-full">
+                  {isSelected ? (
+                    <>
+                      <p className="text-3xl text-white font-medium leading-tight mb-4">
+                        {prompt.question}
+                      </p>
+                      <button
+                        className="mt-2 px-6 py-2 bg-white/10 hover:bg-white/20 rounded-full text-white text-sm transition-colors"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          router.push(`/chatroom/${prompt.id}`);
+                        }}
+                      >
+                        Join Discussion
+                      </button>
+                    </>
+                  ) : (
+                    <p className="text-base text-white font-medium leading-tight line-clamp-3">
                       {prompt.question}
                     </p>
-                    <button
-                      className="mt-2 px-6 py-2 bg-white/10 hover:bg-white/20 rounded-full text-white text-sm transition-colors"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        router.push(`/chatroom/${prompt.id}`);
-                      }}
-                    >
-                      Join Discussion
-                    </button>
-                  </>
-                ) : (
-                  <p className="text-base text-white font-medium leading-tight line-clamp-3">
-                    {prompt.question}
-                  </p>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ export default function Home(): React.ReactElement {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newPrompt, setNewPrompt] = useState<string>("");
   const modalRef = useRef<HTMLDivElement | null>(null);
-
+  
   // Sample prompts import from backend
   const [prompts, setPrompts] = useState<Prompt[]>([
     {
@@ -75,18 +75,15 @@ export default function Home(): React.ReactElement {
   // Close modal when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent): void {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     }
-
+    
     if (isModalOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
-
+    
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -101,11 +98,11 @@ export default function Home(): React.ReactElement {
         question: newPrompt.trim(),
         color: "rgb(67, 56, 202)", // Using the same color as others
       };
-
+      
       setPrompts([...prompts, newPromptObject]);
       setNewPrompt("");
       setIsModalOpen(false);
-
+      
       // Navigate to the chatroom page for the newly created prompt
       router.push(`/chatroom/${newId}`);
     }
@@ -114,49 +111,55 @@ export default function Home(): React.ReactElement {
   return (
     <div className="flex flex-col h-screen bg-black">
       <Grid prompts={prompts} />
-
+      
       {/* Bottom navigation */}
-      <div className="mt-auto flex flex-col justify-between">
-        <div className="flex justify-between items-center px-4 py-3 border-t border-gray-800 bg-black/50 backdrop-blur-sm rounded-b-xl">
-          <MessageSquare className="w-6 h-6" />
+      <div className="flex justify-between items-center px-4 py-3 border-t border-gray-800 bg-black/50 backdrop-blur-sm fixed bottom-0 left-0 right-0">
+        <div className="flex items-center justify-center w-12 h-12">
+          <div className="text-gray-400">
+            <MessageSquare className="w-6 h-6" />
+          </div>
+        </div>
 
-          <button
-            className="bg-indigo-600 text-white rounded-md px-5 py-3 flex items-center justify-center shadow-md hover:bg-indigo-500 transition-colors"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            <span className="font-medium">New Topic</span>
-          </button>
+        <button 
+          className="bg-indigo-600 text-white rounded-md px-5 py-3 flex items-center justify-center shadow-md hover:bg-indigo-500 transition-colors"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <Plus className="w-5 h-5 mr-2" />
+          <span className="font-medium">New Topic</span>
+        </button>
 
-          <Mail className="w-6 h-6" />
+        <div className="flex items-center justify-center w-12 h-12">
+          <div className="text-gray-400">
+            <Mail className="w-6 h-6" />
+          </div>
         </div>
       </div>
 
       {/* Create Prompt Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div
+          <div 
             ref={modalRef}
             className="bg-gray-800 rounded-lg w-full max-w-md mx-4"
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between p-4 border-b border-gray-700">
               <div className="flex items-center space-x-2">
-                <img
-                  src="/api/placeholder/40/40"
-                  alt="User"
-                  className="w-8 h-8 rounded-full"
+                <img 
+                  src="/api/placeholder/40/40" 
+                  alt="User" 
+                  className="w-8 h-8 rounded-full" 
                 />
                 <span className="text-gray-200 font-medium">Jane Row</span>
               </div>
-              <button
+              <button 
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-400 hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-
+            
             {/* Modal Body */}
             <div className="p-4">
               <textarea
@@ -165,18 +168,18 @@ export default function Home(): React.ReactElement {
                 value={newPrompt}
                 onChange={(e) => setNewPrompt(e.target.value)}
               />
-
+              
               <div className="flex items-center mt-4 space-x-2">
                 <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
                   <span>Add media</span>
                 </button>
-
+                
                 <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
                   <span>Add Category</span>
                 </button>
               </div>
             </div>
-
+            
             {/* Modal Footer */}
             <div className="p-4 flex justify-end">
               <button
