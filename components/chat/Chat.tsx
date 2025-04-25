@@ -5,12 +5,20 @@ import { useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { useRouter } from "next/navigation";
 
-const Chat = () => {
+interface Prompt {
+    id: number;
+    question: string;
+    color: string;
+}
+
+interface ChatProps {
+    prompt: Prompt;
+}
+
+const Chat = ({ prompt }: ChatProps) => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
     const router = useRouter();
-
-
 
     const handleEmoji = (e: any) => {
         setText(prev => prev + e.emoji);
@@ -45,7 +53,7 @@ const Chat = () => {
                         </div>
                     </div>
                     <div className="groupinfo">
-                        <p>What's your go-to dinner when you're too tired to cook</p>
+                        <p>{prompt.question}</p>
                     </div>
                 </div>
             </div>
