@@ -1,4 +1,5 @@
 "use client";
+import "./index.css";
 
 import { useParams } from "next/navigation";
 import Chat from "@/components/chat/Chat";
@@ -8,8 +9,11 @@ export default function ChatroomPage() {
   const id = params.id;
 
   return (
-    <div className="h-screen bg-[rgb(40,40,40)]">
+    <main className="flex justify-center items-center min-h-screen px-6 bg-[#282828] text-white">
+      <div className="container">
       <Chat />
     </div>
+    </main>
+    
   );
 }
