@@ -1,5 +1,6 @@
 "use client";
 
+import "./chat.css";
 import { useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 
