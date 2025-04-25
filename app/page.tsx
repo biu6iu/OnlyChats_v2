@@ -2,7 +2,6 @@
 
 import type React from "react";
 
-import { useState, useRef, useEffect } from "react";
 import { Mail, MessageSquare, Plus } from "lucide-react";
 import Grid from "../components/Grid";
 
