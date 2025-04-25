@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 export interface Prompt {
   id: number;
@@ -28,6 +29,7 @@ const Grid: React.FC<GridProps> = ({ prompts }) => {
   const [startTime, setStartTime] = useState(0);
   const [moveDistance, setMoveDistance] = useState(0);
   const lastPosition = useRef({ x: 0, y: 0 });
+  const router = useRouter();
 
   // Calculate positions for radial layout
   const calculateRadialPositions = () => {
@@ -35,16 +37,6 @@ const Grid: React.FC<GridProps> = ({ prompts }) => {
     const calculateBasePositions = () => {
       const positions = [];
       const center = { x: 0, y: 0 };
-
-      // Hexagonal grid directions (60 degree intervals)
-      const hexDirections = [
-        { x: 1, y: 0 }, // right
-        { x: 0.5, y: 0.866 }, // bottom right
-        { x: -0.5, y: 0.866 }, // bottom left
-        { x: -1, y: 0 }, // left
-        { x: -0.5, y: -0.866 }, // top left
-        { x: 0.5, y: -0.866 }, // top right
-      ];
 
       // Center bubble
       positions.push(center);
@@ -360,11 +352,7 @@ const Grid: React.FC<GridProps> = ({ prompts }) => {
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          // Navigate to discussion page
-                          console.log(
-                            "Navigate to discussion for:",
-                            prompt.question
-                          );
+                          router.push(`/chatroom/${prompt.id}`);
                         }}
                       >
                         Join Discussion
