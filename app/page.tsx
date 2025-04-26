@@ -26,11 +26,15 @@ const ModalChat = ({ prompt }: { prompt?: Prompt }) => {
   if (!prompt) {
     return <div>No topic selected</div>;
   }
-  
+
   return (
     <div className="user">
       <div className="user-info">
-        <img src="/api/placeholder/40/40" alt="User" className="w-8 h-8 rounded-full" />
+        <img
+          src="/api/placeholder/40/40"
+          alt="User"
+          className="w-8 h-8 rounded-full"
+        />
         <div className="user-name">
           <span className="text-gray-200 font-medium">Jane Row</span>
         </div>
@@ -54,19 +58,10 @@ export default function Home(): React.ReactElement {
   const [previewPrompt, setPreviewPrompt] = useState<Prompt | null>(null);
 
   const [user] = useAuthState(auth);
-  const [userSession, setUserSession] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setUserSession(sessionStorage.getItem("user"));
-    }
-  }, [user]);
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      sessionStorage.removeItem("user");
-      setUserSession(null);
     } catch (error) {
       console.error(error);
     }
@@ -129,7 +124,10 @@ export default function Home(): React.ReactElement {
   // Close modal when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent): void {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
         setShowLoginPrompt(false);
       }
@@ -170,7 +168,7 @@ export default function Home(): React.ReactElement {
       setPreviewPrompt({
         id: 0,
         question: newPrompt.trim(),
-        color: "rgb(67, 56, 202)"
+        color: "rgb(67, 56, 202)",
       });
     } else {
       setPreviewPrompt(null);
@@ -179,7 +177,7 @@ export default function Home(): React.ReactElement {
 
   // Check if user is logged in before showing new topic modal
   const handleNewTopicClick = () => {
-    if (user || userSession) {
+    if (user) {
       setIsModalOpen(true);
     } else {
       setShowLoginPrompt(true);
@@ -191,7 +189,7 @@ export default function Home(): React.ReactElement {
       <div className="phone-frame relative w-[393px] mx-auto h-screen flex flex-col">
         <div className="flex flex-col h-screen">
           <Header>
-            {!user && !userSession ? (
+            {!user ? (
               <button onClick={() => router.push("/login")}>Login</button>
             ) : (
               <button onClick={handleLogout}>Logout</button>
@@ -227,7 +225,9 @@ export default function Home(): React.ReactElement {
                 className="bg-gray-800 rounded-lg w-full max-w-md mx-4 p-6"
               >
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-xl font-semibold text-white">Login Required</h3>
+                  <h3 className="text-xl font-semibold text-white">
+                    Login Required
+                  </h3>
                   <button
                     onClick={() => setShowLoginPrompt(false)}
                     className="text-gray-400 hover:text-white"
@@ -293,7 +293,6 @@ export default function Home(): React.ReactElement {
                     onChange={(e) => setNewPrompt(e.target.value)}
                   />
 
-
                   <div className="flex items-center mt-4 space-x-2">
                     <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
                       <span>Add media</span>
@@ -309,8 +308,8 @@ export default function Home(): React.ReactElement {
                 <div className="p-4 flex justify-end">
                   <button
                     className={`px-5 py-2 rounded-md font-medium transition-colors ${
-                      newPrompt.trim() 
-                        ? "bg-indigo-600 text-white hover:bg-indigo-500" 
+                      newPrompt.trim()
+                        ? "bg-indigo-600 text-white hover:bg-indigo-500"
                         : "bg-gray-600 text-gray-300 cursor-not-allowed"
                     }`}
                     onClick={handleCreatePrompt}

@@ -25,7 +25,6 @@ export default function LoginPage() {
     try {
       const res = await signInWithEmailAndPassword(email, password);
       if (res) {
-        sessionStorage.setItem("user", "true");
         setEmail("");
         setPassword("");
         window.location.href = "/";

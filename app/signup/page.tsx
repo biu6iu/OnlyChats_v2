@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "../firebase/config";
+import { setDoc, doc } from "firebase/firestore";
+import { db } from "../firebase/config";
 
 export default function SignUpPage() {
   const [username, setUsername] = useState("");
@@ -34,11 +36,15 @@ export default function SignUpPage() {
     try {
       const res = await createUserWithEmailAndPassword(email, password);
       if (res) {
+        await setDoc(doc(db, "users", res.user.uid), {
+          username,
+          email,
+          id: res.user.uid,
+        });
+        setUsername("");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
-        // Optionally store user session
-        // sessionStorage.setItem("user", "true");
         router.push("/login");
       } else {
         alert("Signup failed. Please check your email and password.");
