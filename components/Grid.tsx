@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 
-
 export interface Prompt {
   id: number;
   question: string;
@@ -289,7 +288,7 @@ const Grid: React.FC<GridProps> = ({ prompts }) => {
   }, [dragging, position, startPos, startTime]);
 
   return (
-    <div className="flex flex-col h-screen bg-black">
+    <div className="flex flex-col h-screen">
       {/* App grid container */}
       <div
         ref={containerRef}

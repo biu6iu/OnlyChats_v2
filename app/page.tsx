@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Mail, MessageSquare, X } from "lucide-react";
+import { Inbox, Mail, MessageSquare, MessagesSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import Grid from "../components/Grid";
@@ -144,8 +144,8 @@ export default function Home(): React.ReactElement {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#282828]">
-      <div className="phone-frame">
-        <div className="flex flex-col h-full">
+      <div className="phone-frame relative w-[393px] mx-auto h-screen flex flex-col">
+        <div className="flex flex-col h-screen">
           <Header>
             {!user && !userSession ? (
               <button onClick={() => router.push("/login")}>Login</button>
@@ -158,9 +158,15 @@ export default function Home(): React.ReactElement {
 
           {/* Bottom navigation */}
           <Footer>
-            <MessageSquare className="w-6 h-6" />
+            <div className="flex flex-col justify-center items-center mx-2">
+              <MessagesSquare className="w-8 h-8" />
+              <p className="text-xs">Current Chats</p>
+            </div>
             <NewTopicButton onClick={() => setIsModalOpen(true)} />
-            <Mail className="w-6 h-6" />
+            <div className="flex flex-col justify-center items-center mx-2">
+              <Inbox className="w-8 h-8" />
+              <p className="text-xs">Archived Chats</p>
+            </div>
           </Footer>
 
           {/* Create Prompt Modal */}
