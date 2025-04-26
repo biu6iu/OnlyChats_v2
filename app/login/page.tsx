@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth } from "../firebase/config";
+import { auth } from "@/lib/firebase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

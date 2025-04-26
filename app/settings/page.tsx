@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase/config";
+import { auth } from "@/lib/firebase";
 import { ArrowLeft, Bell, Moon, Volume2, Lock, EyeOff } from "lucide-react";
 
 export default function SettingsPage() {
@@ -37,7 +37,7 @@ export default function SettingsPage() {
       <div className="phone-frame relative w-[393px] mx-auto h-screen flex flex-col">
         {/* Header */}
         <div className="flex items-center p-4 border-b border-gray-700">
-          <button 
+          <button
             onClick={handleBack}
             className="p-2 rounded-full hover:bg-gray-700 mr-4"
           >
@@ -51,8 +51,10 @@ export default function SettingsPage() {
           <div className="space-y-6">
             {/* App Settings Section */}
             <div>
-              <h2 className="text-lg font-medium text-gray-300 mb-3">App Settings</h2>
-              
+              <h2 className="text-lg font-medium text-gray-300 mb-3">
+                App Settings
+              </h2>
+
               {/* Dark Mode */}
               <div className="flex items-center justify-between py-3 border-b border-gray-700">
                 <div className="flex items-center">
@@ -60,16 +62,16 @@ export default function SettingsPage() {
                   <span>Dark Mode</span>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    className="sr-only peer" 
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
                     checked={darkMode}
                     onChange={() => setDarkMode(!darkMode)}
                   />
                   <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                 </label>
               </div>
-              
+
               {/* Notifications */}
               <div className="flex items-center justify-between py-3 border-b border-gray-700">
                 <div className="flex items-center">
@@ -77,16 +79,16 @@ export default function SettingsPage() {
                   <span>Notifications</span>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    className="sr-only peer" 
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
                     checked={notifications}
                     onChange={() => setNotifications(!notifications)}
                   />
                   <div className="w-11 h-6 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
                 </label>
               </div>
-              
+
               {/* Sound */}
               <div className="flex items-center justify-between py-3 border-b border-gray-700">
                 <div className="flex items-center">
@@ -94,9 +96,9 @@ export default function SettingsPage() {
                   <span>Sound</span>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
-                  <input 
-                    type="checkbox" 
-                    className="sr-only peer" 
+                  <input
+                    type="checkbox"
+                    className="sr-only peer"
                     checked={sound}
                     onChange={() => setSound(!sound)}
                   />
@@ -104,11 +106,13 @@ export default function SettingsPage() {
                 </label>
               </div>
             </div>
-            
+
             {/* Privacy Section */}
             <div>
-              <h2 className="text-lg font-medium text-gray-300 mb-3">Privacy</h2>
-              
+              <h2 className="text-lg font-medium text-gray-300 mb-3">
+                Privacy
+              </h2>
+
               <div className="bg-gray-800 rounded-lg overflow-hidden">
                 <button className="w-full flex items-center justify-between py-3 px-4 hover:bg-gray-700">
                   <div className="flex items-center">
@@ -117,7 +121,7 @@ export default function SettingsPage() {
                   </div>
                   <ArrowLeft className="w-4 h-4 rotate-180 text-gray-400" />
                 </button>
-                
+
                 <button className="w-full flex items-center justify-between py-3 px-4 hover:bg-gray-700">
                   <div className="flex items-center">
                     <EyeOff className="w-5 h-5 mr-3 text-gray-400" />

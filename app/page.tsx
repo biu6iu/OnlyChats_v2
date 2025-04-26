@@ -14,7 +14,7 @@ import {
   getDocs,
   onSnapshot,
 } from "firebase/firestore";
-import { auth, db } from "./firebase/config";
+import { auth, db } from "@/lib/firebase";
 
 import Grid from "../components/Grid";
 import Header from "@/components/header/Header";

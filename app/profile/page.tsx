@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase/config";
+import { auth } from "@/lib/firebase";
 import { User, ArrowLeft, Camera } from "lucide-react";
 
 export default function ProfilePage() {

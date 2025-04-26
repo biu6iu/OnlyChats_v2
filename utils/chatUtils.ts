@@ -1,5 +1,4 @@
-// utils/chatUtils.ts
-import { db } from '@/app/firebase/config';
+import { db } from '@/lib/firebase';
 import { 
   collection, 
   query, 
