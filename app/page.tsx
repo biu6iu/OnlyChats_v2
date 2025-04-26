@@ -293,13 +293,6 @@ export default function Home(): React.ReactElement {
                     onChange={(e) => setNewPrompt(e.target.value)}
                   />
 
-                  {/* Preview prompt if text exists */}
-                  {previewPrompt && (
-                    <div className="mt-4 p-3 bg-gray-700/50 rounded-lg">
-                      <h4 className="text-sm text-gray-400 mb-2">Preview:</h4>
-                      <ModalChat prompt={previewPrompt} />
-                    </div>
-                  )}
 
                   <div className="flex items-center mt-4 space-x-2">
                     <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
