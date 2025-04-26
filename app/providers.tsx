@@ -1,11 +1,11 @@
 // app/providers.tsx
 "use client";
 
-import { useEffect } from 'react';
-import { checkAndArchiveInactiveChats } from '@/utils/chatUtils';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from './firebase/config';
-import useUserStore from './zustand/userStore';
+import { useEffect } from "react";
+import { checkAndArchiveInactiveChats } from "@/utils/chatUtils";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "@/lib/firebase";
+import useUserStore from "./zustand/userStore";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [user] = useAuthState(auth);
@@ -22,12 +22,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const runArchiveCheck = async () => {
       if (user) {
-        console.log('Checking for inactive chats to archive...');
+        console.log("Checking for inactive chats to archive...");
         const count = await checkAndArchiveInactiveChats();
         if (count > 0) {
           console.log(`Archived ${count} inactive chats`);
         } else {
-          console.log('No inactive chats to archive');
+          console.log("No inactive chats to archive");
         }
       }
     };

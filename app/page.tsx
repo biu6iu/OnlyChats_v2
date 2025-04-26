@@ -151,7 +151,7 @@ export default function Home(): React.ReactElement {
           <Grid prompts={prompts} />
 
           {/* Bottom navigation */}
-          <Footer className="mb-6">
+          <Footer>
             {" "}
             {/* Add margin-bottom just on Home Page */}
             <div
