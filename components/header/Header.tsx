@@ -21,7 +21,10 @@ export default function Header() {
   useEffect(() => {
     // Close dropdown when clicking outside
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setDropdownOpen(false);
       }
     }
@@ -72,27 +75,17 @@ export default function Header() {
 
         {/* Profile dropdown */}
         <div className="relative" ref={dropdownRef} style={{ zIndex: 9999 }}>
-          <button 
+          <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500"
             aria-expanded={dropdownOpen}
           >
-            {user ? (
-              <img 
-                src="/api/placeholder/40/40" 
-                alt="Profile"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-            ) : (
-              <User className="w-6 h-6 text-gray-300" />
-            )}
+            <User className="w-6 h-6 text-gray-300" />
           </button>
 
           {/* Dropdown menu with inline styles for z-index */}
           {dropdownOpen && (
-            <div 
+            <div
               className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 border border-gray-700"
               style={{ zIndex: 9999 }}
             >
