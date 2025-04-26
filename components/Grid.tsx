@@ -288,7 +288,7 @@ const Grid: React.FC<GridProps> = ({ prompts }) => {
   }, [dragging, position, startPos, startTime]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-full">
       {/* App grid container */}
       <div
         ref={containerRef}

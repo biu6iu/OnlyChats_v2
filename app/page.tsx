@@ -145,7 +145,7 @@ export default function Home(): React.ReactElement {
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#282828]">
       <div className="phone-frame relative w-[393px] mx-auto h-screen flex flex-col">
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-full">
           <Header />
 
           <Grid prompts={prompts} />
