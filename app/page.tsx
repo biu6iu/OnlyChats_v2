@@ -199,23 +199,28 @@ export default function Home(): React.ReactElement {
           <Grid prompts={prompts} />
 
           {/* Bottom navigation */}
-          <Footer>
+          <Footer className="mb-6"> {/* Add margin-bottom just on Home Page */}
             <div
               className="flex flex-col justify-center items-center mx-2 cursor-pointer"
               onClick={() => router.push("/active-chats")}
             >
-              <MessagesSquare className="w-8 h-8" />
-              <p className="text-xs">Current Chats</p>
+              <MessagesSquare className="w-7 h-7" />
+              <p className="text-xs mt-1">Current Chats</p>
             </div>
-            <NewTopicButton onClick={handleNewTopicClick} />
+
+            <div className="relative -mt-2 z-10">
+              <NewTopicButton onClick={handleNewTopicClick} />
+            </div>
+
             <div
               className="flex flex-col justify-center items-center mx-2 cursor-pointer"
               onClick={() => router.push("/archive-chats")}
             >
-              <Inbox className="w-8 h-8" />
-              <p className="text-xs">Archived Chats</p>
+              <Inbox className="w-7 h-7" />
+              <p className="text-xs mt-1">Archived Chats</p>
             </div>
           </Footer>
+
 
           {/* Login Prompt Modal */}
           {showLoginPrompt && (
