@@ -158,12 +158,18 @@ export default function Home(): React.ReactElement {
 
           {/* Bottom navigation */}
           <Footer>
-            <div className="flex flex-col justify-center items-center mx-2">
+            <div
+              className="flex flex-col justify-center items-center mx-2"
+              onClick={() => router.push("/active-chats")}
+            >
               <MessagesSquare className="w-8 h-8" />
               <p className="text-xs">Current Chats</p>
             </div>
             <NewTopicButton onClick={() => setIsModalOpen(true)} />
-            <div className="flex flex-col justify-center items-center mx-2">
+            <div
+              className="flex flex-col justify-center items-center mx-2"
+              onClick={() => router.push("/archive-chats")}
+            >
               <Inbox className="w-8 h-8" />
               <p className="text-xs">Archived Chats</p>
             </div>
