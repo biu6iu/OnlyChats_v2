@@ -230,7 +230,10 @@ export default function Home(): React.ReactElement {
                       alt="User"
                       className="w-8 h-8 rounded-full"
                     />
-                    <span className="text-gray-200 font-medium">Jane Row</span>
+                    <span className="text-gray-200 font-medium">
+                      {" "}
+                      {currentUser?.username}
+                    </span>
                   </div>
                   <button
                     onClick={() => setIsModalOpen(false)}
