@@ -161,13 +161,7 @@ export default function Home(): React.ReactElement {
     <div className="flex justify-center items-center min-h-screen bg-[#282828]">
       <div className="phone-frame relative w-[393px] mx-auto h-screen flex flex-col">
         <div className="flex flex-col h-screen">
-          <Header>
-            {!user ? (
-              <button onClick={() => router.push("/login")}>Login</button>
-            ) : (
-              <button onClick={handleLogout}>Logout</button>
-            )}
-          </Header>
+          <Header />
 
           <Grid prompts={prompts} />
 
