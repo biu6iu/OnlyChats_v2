@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { User, LogOut, Settings } from "lucide-react";
+import { User, LogOut, Settings, UserCircle } from "lucide-react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { signOut } from "firebase/auth";
 
 export default function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [user, loading] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const [userSession, setUserSession] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -38,7 +37,7 @@ export default function Header() {
       await signOut(auth);
       sessionStorage.removeItem("user");
       setDropdownOpen(false);
-      router.push("/");
+      window.location.href = "/";
     } catch (error) {
       console.error("Logout error:", error);
     }
@@ -46,86 +45,113 @@ export default function Header() {
 
   const handleLogin = () => {
     setDropdownOpen(false);
-    router.push("/login");
+    window.location.href = "/login";
   };
 
   const handleProfileClick = () => {
     setDropdownOpen(false);
-    router.push("/profile");
+    window.location.href = "/profile";
+  };
+
+  const handleSettingsClick = () => {
+    setDropdownOpen(false);
+    window.location.href = "/settings";
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex justify-between items-center px-4 py-3 bg-[#282828]/50 backdrop-blur-sm rounded-t-xl">
+    <div className="flex flex-col sticky top-0 z-40">
+      <div className="flex justify-between items-center px-4 py-3 bg-[#282828] border-b border-gray-700">
         {/* Logo Section */}
         <div className="flex items-center space-x-2">
-          <Image
+          <img
             src="/OnlyChats-mini-logo.svg"
             alt="OnlyChats Logo"
-            width={120}
-            height={40}
+            className="w-28 h-auto"
           />
         </div>
 
-        {/* Right side icons */}
-        <div className="flex items-center space-x-4">
-          {/* Profile section with dropdown */}
-          <div className="relative" ref={dropdownRef}>
-            <button 
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              aria-expanded={dropdownOpen}
-            >
-              {user ? (
-                <Image
-                  src="/api/placeholder/40/40" 
-                  alt="Profile"
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              ) : (
-                <User className="w-6 h-6 text-gray-300" />
-              )}
-            </button>
-
-            {/* Dropdown menu */}
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-10 border border-gray-700">
-                {user || userSession ? (
-                  <>
-                    <div className="px-4 py-2 border-b border-gray-700">
-                      <p className="text-sm font-medium text-white truncate">
-                        {user?.email || "User"}
-                      </p>
-                    </div>
-                    <button
-                      onClick={handleProfileClick}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
-                    >
-                      <Settings className="mr-2 h-4 w-4" />
-                      Profile
-                    </button>
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Log out
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={handleLogin}
-                    className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    Log in
-                  </button>
-                )}
-              </div>
+        {/* Profile dropdown */}
+        <div className="relative" ref={dropdownRef} style={{ zIndex: 9999 }}>
+          <button 
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center overflow-hidden focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            aria-expanded={dropdownOpen}
+          >
+            {user ? (
+              <img 
+                src="/api/placeholder/40/40" 
+                alt="Profile"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+            ) : (
+              <User className="w-6 h-6 text-gray-300" />
             )}
-          </div>
+          </button>
+
+          {/* Dropdown menu with inline styles for z-index */}
+          {dropdownOpen && (
+            <div 
+              className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 border border-gray-700"
+              style={{ zIndex: 9999 }}
+            >
+              {user || userSession ? (
+                <>
+                  <div className="px-4 py-2 border-b border-gray-700">
+                    <p className="text-sm font-medium text-white truncate">
+                      {user?.email || "User"}
+                    </p>
+                  </div>
+                  <a
+                    href="/profile"
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleProfileClick();
+                    }}
+                  >
+                    <UserCircle className="mr-2 h-4 w-4" />
+                    Profile
+                  </a>
+                  <a
+                    href="/settings"
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSettingsClick();
+                    }}
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </a>
+                  <a
+                    href="#"
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleLogout();
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Log out
+                  </a>
+                </>
+              ) : (
+                <a
+                  href="/login"
+                  className="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleLogin();
+                  }}
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  Log in
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
