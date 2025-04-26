@@ -2,20 +2,19 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-An online forum which facilitates low pressure, dynamic discussion within a community of friends. Onlychats allows users to spontaneously converse with their peers, incite topic based discussion, ask for advice, and foster connections. Our goal was to build upon the fundamentals of Reddit, the self proclaimed “heart of the internet”, but allow for a more local and conversational vibe. 
+Onlychats is an online forum designed for low-pressure, dynamic conversations among friends and peers. Whether you're sparking a topic-based discussion, asking for advice, or simply chatting with your community, Onlychats offers a space for spontaneous, authentic connection.
 
-We are incorporating the community vibe of Instagram, the self expression aspect of Twitter and the topic prompted discussion of Reddit, creating a minimal and soft user interface, to form Onlychats, an individualised online space where ideas are grown and discussion is inspired.
+Inspired by the depth of Reddit, the community feel of Instagram, and the self-expression of Twitter, OnlyChats brings these elements together in a minimalist, soft-toned interface. The result is a personalised online space where ideas grow naturally and discussions feel genuine.
 
-We want to allow users to have chat about their niches and connect authentically with their community. 
 
-features of the app:
- - user authentication, sign up and login
- - dashboard/feed which shows the current group chats
- - when you enter the chatroom, an easy, low pressure conversation chatroom
- - You can ask for advice, opinion on a topic, weekly favourites, there are also suggested AI prompts if you can’t choose
- - kind of like instagram notes if the notes could create discussion and reddit if it were more conversational and less stress
- - little groupchats designed for discussion, interaction, communication and most importantly fun
- - you can meet more people and join chatrooms based on topics (as opposed to connections)
+## App features
+- **User Authentication:** Sign up and log in securely with Firebase authentication.
+- **Dashboard/Feed:** View and browse your current active group chats in a simple, mobile-first feed.
+- **Low-Pressure Chatrooms:** Enter easygoing, conversation-driven chatrooms built for spontaneous discussion.
+- **Prompt-Based Discussions:** Ask for advice, share opinions, post weekly favourites, or choose from suggested AI-generated prompts if you're unsure.
+- **Instagram Notes Meets Reddit:** Inspired by Instagram Notes — if they evolved into full discussions — and Reddit — if it were more casual, personal, and low-stress.
+- **Lightweight Group Chats:** Participate in small, topic-driven group chats designed for interaction, community, and fun.
+- **Topic-Based Discovery:** Meet new people and join public chatrooms based on interests, not just existing social connections.
 
 ## Getting Started
 First, install dependencies using:
