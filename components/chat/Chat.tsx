@@ -1,9 +1,17 @@
 "use client";
 
 import "./chat.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { useRouter } from "next/navigation";
+import { onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+
+interface Message {
+    text: string;
+    sender: string;
+    timestamp: Date;
+}
 
 interface Prompt {
     id: number;
@@ -18,16 +26,53 @@ interface ChatProps {
 const Chat = ({ prompt }: ChatProps) => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
+    const [messages, setMessages] = useState<Message[]>([]);
     const router = useRouter();
+    const endRef = useRef<HTMLDivElement>(null);
 
     const handleEmoji = (e: any) => {
         setText(prev => prev + e.emoji);
         setOpen(false);
     };
-
+ 
     const handleBack = () => {
         window.location.href = "/";
     };
+
+    const handleSend = async () => {
+        if (!text.trim()) return;
+        
+        const newMessage: Message = {
+            text: text.trim(),
+            sender: "user", // You might want to replace this with actual user info
+            timestamp: new Date()
+        };
+
+        try {
+            const chatRef = doc(db, "chats", "debKOJFRFgpiIxtCb8nE");
+            await updateDoc(chatRef, {
+                messages: arrayUnion(newMessage)
+            });
+            setText("");
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
+    };
+
+    useEffect(() => {
+        endRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
+    useEffect(() => {
+        const chatRef = doc(db, "chats", "debKOJFRFgpiIxtCb8nE");
+        const unSub = onSnapshot(chatRef, (doc) => {
+            if (doc.exists()) {
+                const data = doc.data();
+                setMessages(data.messages || []);
+            }
+        });
+        return () => unSub();
+    }, []);
 
     return (
         <div className="chat">
@@ -47,7 +92,6 @@ const Chat = ({ prompt }: ChatProps) => {
                         <div className="user-name">
                             <span>Jane Doe</span>
                         </div>
-
                         <div className="time">
                             <span>2 hours ago</span>
                         </div>
@@ -60,89 +104,22 @@ const Chat = ({ prompt }: ChatProps) => {
 
             <div className="center">
                 <div className="message-container">
-                    <div className="message-own">
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkfj</p>
+                    {messages.map((message, index) => (
+                        <div key={index} className={message.sender === "user" ? "message-own" : "message"}>
+                            {message.sender !== "user" && (
+                                <div className="user">
+                                    <p>{message.sender}</p>
+                                </div>
+                            )}
+                            <div className="texts">
+                                <p>{message.text}</p>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div className="message">
-                        <div className="user">
-                            <p>Jane Doe</p>
-                        </div>
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
-                        </div>
-                    </div>
-                    <div className="message-own">
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkfj</p>
-                        </div>
-                    </div>
-                    
-                    <div className="message">
-                        <div className="user">
-                            <p>Jane Doe</p>
-                        </div>
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
-                        </div>
-                    </div>
-                    <div className="message-own">
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkfj</p>
-                        </div>
-                    </div>
-                    
-                    <div className="message">
-                        <div className="user">
-                            <p>Jane Doe</p>
-                        </div>
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
-                        </div>
-                    </div>
-                    <div className="message-own">
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkfj</p>
-                        </div>
-                    </div>
-                    
-                    <div className="message">
-                        <div className="user">
-                            <p>Jane Doe</p>
-                        </div>
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
-                        </div>
-                    </div>
-                    
-                    <div className="message">
-                        <div className="user">
-                            <p>Jane Doe</p>
-                        </div>
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
-                        </div>
-                    </div>
-                    <div className="message">
-                        <div className="user">
-                            <p>Jane Doe</p>
-                        </div>
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
-                        </div>
-                    </div>
-                    <div className="message">
-                        <div className="user">
-                            <p>Jane Doe</p>
-                        </div>
-                        <div className="texts">
-                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
-                        </div>
-                    </div>
+                    ))}
+                    <div ref={endRef} />
                 </div>
             </div>
+
             <div className="bottom">
                 <div className="icons">
                     <img src="/Vector.svg" alt="" />
@@ -165,8 +142,9 @@ const Chat = ({ prompt }: ChatProps) => {
                     placeholder="Type your comment here"
                     value={text}
                     onChange={e => setText(e.target.value)}
+                    onKeyPress={e => e.key === 'Enter' && handleSend()}
                 />
-                <button className="send-button">
+                <button className="send-button" onClick={handleSend}>
                     <img src="/send2.svg" alt="" />
                 </button>
             </div>
