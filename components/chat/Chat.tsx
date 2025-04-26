@@ -58,7 +58,91 @@ const Chat = ({ prompt }: ChatProps) => {
                 </div>
             </div>
 
-            <div className="center"></div>
+            <div className="center">
+                <div className="message-container">
+                    <div className="message-own">
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkfj</p>
+                        </div>
+                    </div>
+                    
+                    <div className="message">
+                        <div className="user">
+                            <p>Jane Doe</p>
+                        </div>
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
+                        </div>
+                    </div>
+                    <div className="message-own">
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkfj</p>
+                        </div>
+                    </div>
+                    
+                    <div className="message">
+                        <div className="user">
+                            <p>Jane Doe</p>
+                        </div>
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
+                        </div>
+                    </div>
+                    <div className="message-own">
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkfj</p>
+                        </div>
+                    </div>
+                    
+                    <div className="message">
+                        <div className="user">
+                            <p>Jane Doe</p>
+                        </div>
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
+                        </div>
+                    </div>
+                    <div className="message-own">
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkfj</p>
+                        </div>
+                    </div>
+                    
+                    <div className="message">
+                        <div className="user">
+                            <p>Jane Doe</p>
+                        </div>
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
+                        </div>
+                    </div>
+                    
+                    <div className="message">
+                        <div className="user">
+                            <p>Jane Doe</p>
+                        </div>
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
+                        </div>
+                    </div>
+                    <div className="message">
+                        <div className="user">
+                            <p>Jane Doe</p>
+                        </div>
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
+                        </div>
+                    </div>
+                    <div className="message">
+                        <div className="user">
+                            <p>Jane Doe</p>
+                        </div>
+                        <div className="texts">
+                            <p> tas;dlkfja;dslkdjkfasd;lfjasd;lfkjasd;lfkja;sdlkjfa;sldfkja;slkdfja;sldkfjals;dfj;alsdkfj;lkjffj</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="bottom">
                 <div className="icons">
                     <img src="/Vector.svg" alt="" />
