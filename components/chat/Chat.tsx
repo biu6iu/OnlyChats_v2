@@ -1,5 +1,6 @@
 "use client";
 
+import useUserStore from "@/app/zustand/userStore";
 import "./chat.css";
 import { useState, useEffect, useRef } from "react";
 import EmojiPicker from "emoji-picker-react";
@@ -11,6 +12,7 @@ interface Message {
     text: string;
     sender: string;
     timestamp: Date;
+    userId: string;
 }
 
 interface Prompt {
@@ -29,6 +31,7 @@ const Chat = ({ prompt }: ChatProps) => {
     const [messages, setMessages] = useState<Message[]>([]);
     const router = useRouter();
     const endRef = useRef<HTMLDivElement>(null);
+    const { currentUser } = useUserStore();
 
     const handleEmoji = (e: any) => {
         setText(prev => prev + e.emoji);
@@ -40,12 +43,13 @@ const Chat = ({ prompt }: ChatProps) => {
     };
 
     const handleSend = async () => {
-        if (!text.trim()) return;
+        if (!text.trim() || !currentUser) return;
         
         const newMessage: Message = {
             text: text.trim(),
-            sender: "user", // You might want to replace this with actual user info
-            timestamp: new Date()
+            sender: currentUser.username || "user",
+            timestamp: new Date(),
+            userId: currentUser.id
         };
 
         try {
