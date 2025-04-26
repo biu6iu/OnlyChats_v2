@@ -3,7 +3,7 @@
 
 import "../../chatroom/[id]/index.css";
 import { useParams } from "next/navigation";
-import ArchivedChat from "../../../components/chat/ArchivedChat";
+import ArchivedChat from "@/components/chat/ArchivedChat";
 import { useState, useEffect } from "react";
 
 interface Prompt {
