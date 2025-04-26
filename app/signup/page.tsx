@@ -12,22 +12,34 @@ export default function SignUpPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const [createUserWithEmailAndPassword] =
-    useCreateUserWithEmailAndPassword(auth);
   const router = useRouter();
 
-  const handleSignup = async () => {
+  const [createUserWithEmailAndPassword] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  const validateAndSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!username || !email || !password || !confirmPassword) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
     try {
       const res = await createUserWithEmailAndPassword(email, password);
       if (res) {
         setEmail("");
         setPassword("");
-        sessionStorage.setItem("user", "true");
-        window.location.href = "/";
+        setConfirmPassword("");
+        // Optionally store user session
+        // sessionStorage.setItem("user", "true");
+        router.push("/login");
       } else {
         alert("Signup failed. Please check your email and password.");
       }
@@ -51,7 +63,7 @@ export default function SignUpPage() {
       </div>
 
       {/* Sign Up Form */}
-      <div className="w-full max-w-xs">
+      <form className="w-full max-w-xs" onSubmit={validateAndSignup}>
         <h1 className="text-2xl font-bold mb-6">Create account</h1>
 
         <input
@@ -98,6 +110,8 @@ export default function SignUpPage() {
           <input
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm your password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full bg-transparent border-b border-gray-400 p-2 pr-10 text-sm placeholder-gray-400"
           />
           <button
@@ -115,7 +129,7 @@ export default function SignUpPage() {
         </div>
 
         <button
-          onClick={handleSignup}
+          type="submit"
           className="w-full bg-[#5B3EFF] text-white rounded-full py-3 font-semibold text-sm hover:bg-[#6d52ff]"
         >
           Sign Up
@@ -127,7 +141,7 @@ export default function SignUpPage() {
             Login
           </Link>
         </p>
-      </div>
+      </form>
     </main>
   );
 }
