@@ -35,7 +35,7 @@ export default function ActiveChatsPage() {
       <div className="phone-frame w-[393px] h-screen flex flex-col overflow-hidden text-white">
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-700">
-          <h1 className="text-2xl font-bold">Your current chats</h1>
+          <h1 className="text-2xl font-bold">Chats</h1>
           <div className="flex space-x-4">
             <Search className="w-6 h-6" />
             <User className="w-6 h-6" />
