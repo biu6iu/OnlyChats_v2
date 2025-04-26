@@ -32,6 +32,16 @@ export default function Home(): React.ReactElement {
 
   const [user] = useAuthState(auth);
 
+  const { currentUser, isLoading, fetchUserInfo } = useUserStore();
+  useEffect(() => {
+    if (user) {
+      fetchUserInfo(user.uid);
+    }
+  }, [user, fetchUserInfo]);
+  console.log(currentUser);
+
+  console.log(user);
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
