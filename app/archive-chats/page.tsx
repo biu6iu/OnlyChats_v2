@@ -16,46 +16,42 @@ interface Chat {
 
 export default function ArchiveChatsPage() {
   const router = useRouter();
-  const [archivedChats, setArchivedChats] = useState<Chat[]>([]);
-
-  useEffect(() => {
-    const mockChats = Array.from({ length: 8 }, (_, i) => ({
-      id: i + 100,
-      title: "Post Title",
-      comments: 112,
-      date: "6/16/2022"
-    }));
-
-    setArchivedChats(mockChats);
-  }, []);
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#282828]">
-      <div className="phone-frame w-[393px] h-screen flex flex-col overflow-hidden text-white">
-        {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-700">
-          <h1 className="text-2xl font-bold">Archived Chats</h1>
-          <div className="flex space-x-4">
-            <Search className="w-6 h-6" />
-            <User className="w-6 h-6" />
+      <div className="phone-frame w-[393px] h-screen flex flex-col overflow-hidden text-white relative">
+        {/* Modal Overlay */}
+        <div className="absolute inset-0 bg-black bg-opacity-80 z-50 flex flex-col items-center justify-center">
+          <div className="bg-[#333] p-8 rounded-lg text-center max-w-[80%]">
+            <h2 className="text-xl font-bold mb-4">Page Under Construction</h2>
+            <p className="text-gray-300 mb-6">
+              This feature is currently in development.
+            </p>
+            <button
+              onClick={() => router.push("/")}
+              className="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-500 transition-colors"
+            >
+              Return Home
+            </button>
           </div>
         </div>
 
-        {/* Chat list */}
+        {/* Rest of the page content (will be blurred/hidden by overlay) */}
         <div className="flex-1 overflow-auto">
-          {archivedChats.map((chat) => (
+          {/* Chat list */}
+          {Array.from({ length: 8 }, (_, i) => (
             <div
-              key={chat.id}
+              key={i}
               className="flex items-center p-4 border-b border-gray-700 hover:bg-gray-800 cursor-pointer"
-              onClick={() => router.push(`/archive-chatroom/${chat.id}`)}
+              onClick={() => router.push(`/archive-chatroom/${i + 100}`)}
             >
               <div className="flex-shrink-0 w-16 h-16 bg-gray-700 rounded flex items-center justify-center mr-4">
                 <MessagesSquare className="w-8 h-8 text-gray-400" />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium text-lg">{chat.title}</h3>
+                <h3 className="font-medium text-lg">Post Title</h3>
                 <p className="text-sm text-gray-400">
-                  {chat.comments} comments • {chat.date}
+                  112 comments • 6/16/2022
                 </p>
               </div>
             </div>
