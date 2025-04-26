@@ -18,17 +18,14 @@ features of the app:
  - you can meet more people and join chatrooms based on topics (as opposed to connections)
 
 ## Getting Started
+First, install dependencies using:
+```
+npm i
+```
 
-First, run the development server:
-
-```bash
+Then, run the development server:
+```
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
