@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Inbox, Mail, MessageSquare, MessagesSquare, X } from "lucide-react";
+import { Inbox, MessageSquare, MessagesSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import Grid from "../components/Grid";
@@ -20,19 +20,43 @@ interface Prompt {
   color: string;
 }
 
+// Define a simplified Chat component directly in the page.tsx file
+// This should only be used for the modal
+const ModalChat = ({ prompt }: { prompt?: Prompt }) => {
+  if (!prompt) {
+    return <div>No topic selected</div>;
+  }
+  
+  return (
+    <div className="user">
+      <div className="user-info">
+        <img src="/api/placeholder/40/40" alt="User" className="w-8 h-8 rounded-full" />
+        <div className="user-name">
+          <span className="text-gray-200 font-medium">Jane Row</span>
+        </div>
+        <div className="time">
+          <span className="text-xs text-gray-400">Just now</span>
+        </div>
+      </div>
+      <div className="groupinfo mt-2">
+        <p className="text-white">{prompt.question}</p>
+      </div>
+    </div>
+  );
+};
+
 export default function Home(): React.ReactElement {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newPrompt, setNewPrompt] = useState<string>("");
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const [showLoginPrompt, setShowLoginPrompt] = useState<boolean>(false);
+  const [previewPrompt, setPreviewPrompt] = useState<Prompt | null>(null);
 
   const [user] = useAuthState(auth);
   const [userSession, setUserSession] = useState<string | null>(null);
 
-  console.log(user);
-
   useEffect(() => {
-    console.log(user);
     if (typeof window !== "undefined") {
       setUserSession(sessionStorage.getItem("user"));
     }
@@ -40,10 +64,9 @@ export default function Home(): React.ReactElement {
 
   const handleLogout = async () => {
     try {
-      const res = await signOut(auth);
-      console.log({ res });
+      await signOut(auth);
       sessionStorage.removeItem("user");
-      setUserSession(sessionStorage.getItem("user"));
+      setUserSession(null);
     } catch (error) {
       console.error(error);
     }
@@ -106,22 +129,20 @@ export default function Home(): React.ReactElement {
   // Close modal when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent): void {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
+        setShowLoginPrompt(false);
       }
     }
 
-    if (isModalOpen) {
+    if (isModalOpen || showLoginPrompt) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isModalOpen]);
+  }, [isModalOpen, showLoginPrompt]);
 
   // Function to handle creating a new prompt
   const handleCreatePrompt = (): void => {
@@ -136,9 +157,32 @@ export default function Home(): React.ReactElement {
       setPrompts([...prompts, newPromptObject]);
       setNewPrompt("");
       setIsModalOpen(false);
+      setPreviewPrompt(null);
 
       // Navigate to the chatroom page for the newly created prompt
       router.push(`/chatroom/${newId}`);
+    }
+  };
+
+  // Preview the prompt as user types
+  useEffect(() => {
+    if (newPrompt.trim()) {
+      setPreviewPrompt({
+        id: 0,
+        question: newPrompt.trim(),
+        color: "rgb(67, 56, 202)"
+      });
+    } else {
+      setPreviewPrompt(null);
+    }
+  }, [newPrompt]);
+
+  // Check if user is logged in before showing new topic modal
+  const handleNewTopicClick = () => {
+    if (user || userSession) {
+      setIsModalOpen(true);
+    } else {
+      setShowLoginPrompt(true);
     }
   };
 
@@ -159,21 +203,61 @@ export default function Home(): React.ReactElement {
           {/* Bottom navigation */}
           <Footer>
             <div
-              className="flex flex-col justify-center items-center mx-2"
+              className="flex flex-col justify-center items-center mx-2 cursor-pointer"
               onClick={() => router.push("/active-chats")}
             >
               <MessagesSquare className="w-8 h-8" />
               <p className="text-xs">Current Chats</p>
             </div>
-            <NewTopicButton onClick={() => setIsModalOpen(true)} />
+            <NewTopicButton onClick={handleNewTopicClick} />
             <div
-              className="flex flex-col justify-center items-center mx-2"
+              className="flex flex-col justify-center items-center mx-2 cursor-pointer"
               onClick={() => router.push("/archive-chats")}
             >
               <Inbox className="w-8 h-8" />
               <p className="text-xs">Archived Chats</p>
             </div>
           </Footer>
+
+          {/* Login Prompt Modal */}
+          {showLoginPrompt && (
+            <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+              <div
+                ref={modalRef}
+                className="bg-gray-800 rounded-lg w-full max-w-md mx-4 p-6"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold text-white">Login Required</h3>
+                  <button
+                    onClick={() => setShowLoginPrompt(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <p className="text-gray-300 mb-6">
+                  You need to be logged in to create a new topic.
+                </p>
+                <div className="flex justify-end space-x-4">
+                  <button
+                    onClick={() => setShowLoginPrompt(false)}
+                    className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowLoginPrompt(false);
+                      router.push("/login");
+                    }}
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500"
+                  >
+                    Login
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Create Prompt Modal */}
           {isModalOpen && (
@@ -209,6 +293,14 @@ export default function Home(): React.ReactElement {
                     onChange={(e) => setNewPrompt(e.target.value)}
                   />
 
+                  {/* Preview prompt if text exists */}
+                  {previewPrompt && (
+                    <div className="mt-4 p-3 bg-gray-700/50 rounded-lg">
+                      <h4 className="text-sm text-gray-400 mb-2">Preview:</h4>
+                      <ModalChat prompt={previewPrompt} />
+                    </div>
+                  )}
+
                   <div className="flex items-center mt-4 space-x-2">
                     <button className="flex items-center space-x-2 px-3 py-2 rounded-md bg-gray-700 text-gray-300 text-sm">
                       <span>Add media</span>
@@ -223,8 +315,13 @@ export default function Home(): React.ReactElement {
                 {/* Modal Footer */}
                 <div className="p-4 flex justify-end">
                   <button
-                    className="bg-indigo-600 text-white px-5 py-2 rounded-md font-medium hover:bg-indigo-500 transition-colors"
+                    className={`px-5 py-2 rounded-md font-medium transition-colors ${
+                      newPrompt.trim() 
+                        ? "bg-indigo-600 text-white hover:bg-indigo-500" 
+                        : "bg-gray-600 text-gray-300 cursor-not-allowed"
+                    }`}
                     onClick={handleCreatePrompt}
+                    disabled={!newPrompt.trim()}
                   >
                     Post
                   </button>
