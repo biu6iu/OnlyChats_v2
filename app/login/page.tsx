@@ -12,7 +12,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
 
-  const handleSignIn = async () => {
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
     try {
       const res = await signInWithEmailAndPassword(email, password);
       if (res) {
@@ -21,10 +30,10 @@ export default function LoginPage() {
         setPassword("");
         window.location.href = "/";
       } else {
-        // Show an error message to the user
         alert("Invalid email or password.");
       }
-    } catch (error) {
+    } catch (error: any) {
+      alert(error.message || "An error occurred during login.");
       console.error(error);
     }
   };
@@ -34,7 +43,7 @@ export default function LoginPage() {
       {/* Logo */}
       <div className="mb-10 text-center">
         <Image
-          src="/onlychats-logo-svg.svg" // make sure this path matches the logo file in your public folder
+          src="/onlychats-logo-svg.svg"
           alt="OnlyChats Logo"
           width={250}
           height={100}
@@ -46,13 +55,14 @@ export default function LoginPage() {
       <h1 className="text-2xl font-bold mb-6 w-full max-w-xs">Login</h1>
 
       {/* Login form */}
-      <div className="w-full max-w-xs">
+      <form className="w-full max-w-xs" onSubmit={handleSignIn}>
         <input
           type="email"
           placeholder="Email"
           className="w-full bg-transparent border-b border-gray-400 mb-6 p-2 text-sm placeholder-gray-400"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
@@ -60,6 +70,7 @@ export default function LoginPage() {
           className="w-full bg-transparent border-b border-gray-400 mb-4 p-2 text-sm placeholder-gray-400"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
         <div className="text-right text-sm mb-6">
           <a href="#" className="text-[#5B3EFF]">
@@ -67,7 +78,7 @@ export default function LoginPage() {
           </a>
         </div>
         <button
-          onClick={handleSignIn}
+          type="submit"
           className="w-full bg-[#5B3EFF] text-white rounded-full py-3 font-semibold text-sm hover:bg-[#6d52ff]"
         >
           Login
@@ -78,7 +89,7 @@ export default function LoginPage() {
             Sign up
           </Link>
         </p>
-      </div>
+      </form>
     </main>
   );
 }
