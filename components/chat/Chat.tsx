@@ -109,8 +109,8 @@ const Chat = ({ prompt }: ChatProps) => {
             <div className="center">
                 <div className="message-container">
                     {messages.map((message, index) => (
-                        <div key={index} className={message.sender === "user" ? "message-own" : "message"}>
-                            {message.sender !== "user" && (
+                        <div key={index} className={message.sender === currentUser?.username ? "message-own" : "message"}>
+                            {message.sender !== currentUser?.username && (
                                 <div className="user">
                                     <p>{message.sender}</p>
                                 </div>

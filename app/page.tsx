@@ -3,15 +3,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Inbox, MessageSquare, MessagesSquare, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+  onSnapshot,
+} from "firebase/firestore";
+import { auth, db } from "./firebase/config";
 
 import Grid from "../components/Grid";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import NewTopicButton from "@/components/footer/newTopicButton";
-
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "./firebase/config";
-import { signOut } from "firebase/auth";
 
 import useUserStore from "./zustand/userStore";
 
@@ -29,80 +37,45 @@ export default function Home(): React.ReactElement {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const [showLoginPrompt, setShowLoginPrompt] = useState<boolean>(false);
   const [previewPrompt, setPreviewPrompt] = useState<Prompt | null>(null);
+  const [prompts, setPrompts] = useState<Prompt[]>([]);
 
   const [user] = useAuthState(auth);
-
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
+
   useEffect(() => {
     if (user) {
       fetchUserInfo(user.uid);
     }
   }, [user, fetchUserInfo]);
-  console.log(currentUser);
 
-  console.log(user);
+  // Fetch prompts from Firestore
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      try {
+        const promptsRef = collection(db, "prompts");
+        const q = query(promptsRef, orderBy("createdAt", "desc"));
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+        // Set up real-time listener
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          const fetchedPrompts = snapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              id: data.id,
+              question: data.question,
+              color: "rgb(67, 56, 202)", // Keep consistent color
+            };
+          });
+          setPrompts(fetchedPrompts);
+        });
 
-  // Sample prompts import from backend
-  const [prompts, setPrompts] = useState<Prompt[]>([
-    {
-      id: 1,
-      question: "What's your go-to dinner when you're too tired to cook?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 2,
-      question: "What's something specific that helps you fall asleep?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 3,
-      question: "What's a small act of kindness you'll never forget?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 4,
-      question: "What's the most beautiful place you've ever been?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 5,
-      question: "What's a skill you wish you had learned earlier?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 6,
-      question: "What's your favorite childhood memory?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 7,
-      question: "What's the best advice you've ever received?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 8,
-      question: "What's a small thing that makes your day better?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 9,
-      question: "What's a tradition you want to start?",
-      color: "rgb(67, 56, 202)",
-    },
-    {
-      id: 10,
-      question: "What's something you're proud of but never get to talk about?",
-      color: "rgb(67, 56, 202)",
-    },
-  ]);
+        return () => unsubscribe();
+      } catch (error) {
+        console.error("Error fetching prompts:", error);
+      }
+    };
+
+    fetchPrompts();
+  }, []);
 
   // Close modal when clicking outside
   useEffect(() => {
@@ -125,45 +98,47 @@ export default function Home(): React.ReactElement {
     };
   }, [isModalOpen, showLoginPrompt]);
 
-  // Function to handle creating a new prompt
-  const handleCreatePrompt = (): void => {
-    if (newPrompt.trim()) {
-      const newId = prompts.length + 1;
-      const newPromptObject: Prompt = {
-        id: newId,
-        question: newPrompt.trim(),
-        color: "rgb(67, 56, 202)", // Using the same color as others
-      };
-
-      setPrompts([...prompts, newPromptObject]);
-      setNewPrompt("");
-      setIsModalOpen(false);
-      setPreviewPrompt(null);
-
-      // Navigate to the chatroom page for the newly created prompt
-      router.push(`/chatroom/${newId}`);
-    }
-  };
-
-  // Preview the prompt as user types
-  useEffect(() => {
-    if (newPrompt.trim()) {
-      setPreviewPrompt({
-        id: 0,
-        question: newPrompt.trim(),
-        color: "rgb(67, 56, 202)",
-      });
-    } else {
-      setPreviewPrompt(null);
-    }
-  }, [newPrompt]);
-
   // Check if user is logged in before showing new topic modal
   const handleNewTopicClick = () => {
     if (user) {
       setIsModalOpen(true);
     } else {
       setShowLoginPrompt(true);
+    }
+  };
+
+  const handleCreatePrompt = async (): Promise<void> => {
+    if (!newPrompt.trim() || !currentUser) return;
+
+    try {
+      // Get the latest prompt to determine the next ID
+      const promptsRef = collection(db, "prompts");
+      const latestPromptQuery = query(
+        promptsRef,
+        orderBy("id", "desc"),
+        limit(1)
+      );
+      const querySnapshot = await getDocs(latestPromptQuery);
+
+      let nextId = 1;
+      if (!querySnapshot.empty) {
+        nextId = (querySnapshot.docs[0].data().id || 0) + 1;
+      }
+
+      const promptRef = await addDoc(collection(db, "prompts"), {
+        id: nextId,
+        question: newPrompt.trim(),
+        userId: currentUser.id,
+        username: currentUser.username,
+        createdAt: serverTimestamp(),
+      });
+
+      setNewPrompt("");
+      setIsModalOpen(false);
+      router.push(`/chatroom/${nextId}`);
+    } catch (error) {
+      console.error("Error creating prompt:", error);
+      alert("Failed to create prompt. Please try again.");
     }
   };
 
