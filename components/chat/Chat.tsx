@@ -86,11 +86,12 @@ const Chat = ({ prompt }: ChatProps) => {
     <div className="chat">
       <div className="header">
         <button className="back" onClick={handleBack}>
-          <img src="/back.svg" alt="" />
+          <img
+            src="/OnlyChats-mini-logo.svg"
+            alt="OnlyChats Logo"
+            className="w-28 h-auto"
+          />
         </button>
-        <div className="groupTopic">
-          <span>Group Topic</span>
-        </div>
       </div>
 
       <div className="top">
