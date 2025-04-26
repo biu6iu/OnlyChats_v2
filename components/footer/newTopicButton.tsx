@@ -8,11 +8,10 @@ interface NewTopicButtonProps {
 export default function NewTopicButton({ onClick }: NewTopicButtonProps) {
   return (
     <button
-      className="bg-indigo-600 text-white rounded-md px-5 py-3 flex items-center justify-center shadow-md hover:bg-indigo-500 transition-colors"
+      className="bg-indigo-600 text-white rounded-md px-4 py-3 flex items-center justify-center shadow-lg hover:bg-indigo-500 transition-colors hover:shadow-xl"
       onClick={onClick}
     >
-      <Plus className="w-5 h-5 mr-2" />
-      <span className="font-medium">New Topic</span>
+      <Plus className="w-5 h-5" strokeWidth={3.5} />
     </button>
   );
 }
