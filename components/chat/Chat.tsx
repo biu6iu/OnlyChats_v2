@@ -18,6 +18,7 @@ interface Message {
 
 interface Prompt {
   id: number;
+  username: string;
   question: string;
   color: string;
 }
@@ -96,10 +97,7 @@ const Chat = ({ prompt }: ChatProps) => {
           <div className="user-info">
             <img src="/avatar.png" alt="" />
             <div className="user-name">
-              <span>Jane Doe</span>
-            </div>
-            <div className="time">
-              <span>2 hours ago</span>
+              <span>{prompt.username}</span>
             </div>
           </div>
           <div className="groupinfo">
