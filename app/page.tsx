@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Inbox, MessageSquare, MessagesSquare, X } from "lucide-react";
+import { Inbox, MessageSquare, MessagesSquare, User, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
@@ -225,11 +225,7 @@ export default function Home(): React.ReactElement {
                 {/* Modal Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-700">
                   <div className="flex items-center space-x-2">
-                    <img
-                      src="/api/placeholder/40/40"
-                      alt="User"
-                      className="w-8 h-8 rounded-full"
-                    />
+                    <User className="w-8 h-8 text-gray-300" />
                     <span className="text-gray-200 font-medium">
                       {" "}
                       {currentUser?.username}

@@ -7,6 +7,7 @@ import EmojiPicker from "emoji-picker-react";
 import { useRouter } from "next/navigation";
 import { onSnapshot, doc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { User } from "lucide-react";
 
 interface Message {
   text: string;
@@ -95,9 +96,9 @@ const Chat = ({ prompt }: ChatProps) => {
       <div className="top">
         <div className="user">
           <div className="user-info">
-            <img src="/avatar.png" alt="" />
+            <User className="w-7 h-7 text-gray-300" />
             <div className="user-name">
-              <span>{prompt.username}</span>
+              <span className="font-semibold">{prompt.username}</span>
             </div>
           </div>
           <div className="groupinfo">
