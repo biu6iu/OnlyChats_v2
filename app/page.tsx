@@ -13,41 +13,14 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/config";
 import { signOut } from "firebase/auth";
 
+import useUserStore from "./zustand/userStore";
+
 // Import the Prompt interface from Grid component or define it here
 interface Prompt {
   id: number;
   question: string;
   color: string;
 }
-
-// Define a simplified Chat component directly in the page.tsx file
-// This should only be used for the modal
-const ModalChat = ({ prompt }: { prompt?: Prompt }) => {
-  if (!prompt) {
-    return <div>No topic selected</div>;
-  }
-
-  return (
-    <div className="user">
-      <div className="user-info">
-        <img
-          src="/api/placeholder/40/40"
-          alt="User"
-          className="w-8 h-8 rounded-full"
-        />
-        <div className="user-name">
-          <span className="text-gray-200 font-medium">Jane Row</span>
-        </div>
-        <div className="time">
-          <span className="text-xs text-gray-400">Just now</span>
-        </div>
-      </div>
-      <div className="groupinfo mt-2">
-        <p className="text-white">{prompt.question}</p>
-      </div>
-    </div>
-  );
-};
 
 export default function Home(): React.ReactElement {
   const router = useRouter();
@@ -199,7 +172,9 @@ export default function Home(): React.ReactElement {
           <Grid prompts={prompts} />
 
           {/* Bottom navigation */}
-          <Footer className="mb-6"> {/* Add margin-bottom just on Home Page */}
+          <Footer className="mb-6">
+            {" "}
+            {/* Add margin-bottom just on Home Page */}
             <div
               className="flex flex-col justify-center items-center mx-2 cursor-pointer"
               onClick={() => router.push("/active-chats")}
@@ -207,11 +182,9 @@ export default function Home(): React.ReactElement {
               <MessagesSquare className="w-7 h-7" />
               <p className="text-xs mt-1">Current Chats</p>
             </div>
-
             <div className="relative -mt-2 z-10">
               <NewTopicButton onClick={handleNewTopicClick} />
             </div>
-
             <div
               className="flex flex-col justify-center items-center mx-2 cursor-pointer"
               onClick={() => router.push("/archive-chats")}
@@ -220,7 +193,6 @@ export default function Home(): React.ReactElement {
               <p className="text-xs mt-1">Archived Chats</p>
             </div>
           </Footer>
-
 
           {/* Login Prompt Modal */}
           {showLoginPrompt && (
